@@ -1062,6 +1062,7 @@ GameObject:
   - component: {fileID: 1147500691}
   - component: {fileID: 1147500692}
   - component: {fileID: 1147500693}
+  - component: {fileID: 1147500694}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1232,10 +1233,11 @@ MonoBehaviour:
   moveSpeed: 8
   jumpForce: 12
   groundCheck: {fileID: 1217980550}
-  groundCheckRadius: 0.2
+  groundRadius: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  isReplayGhost: 0
 --- !u!114 &1147500692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1347,6 +1349,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &1147500694
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147500685}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 27caa08fc7f4fc24dbb1a39879c86427, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1217980549
 GameObject:
   m_ObjectHideFlags: 0

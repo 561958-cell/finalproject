@@ -5,34 +5,42 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed = 5f;
 
-    [Header("Jumping")]
+    [Header("Jump")]
     public float jumpForce = 12f;
 
     [Header("Ground Check")]
     public Transform groundCheck;
-    public float groundCheckRadius = 0.2f;
+    public float groundRadius = 0.2f;
     public LayerMask groundLayer;
 
     private Rigidbody2D rb;
+    private Animator animator;
 
     private float moveInput;
     private bool jumpPressed;
 
     private bool isGrounded;
 
+    [HideInInspector]
+    public bool isReplayGhost = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        // INPUT
-        moveInput = Input.GetAxisRaw("Horizontal");
-
-        if (Input.GetButtonDown("Jump"))
+        // ONLY real player reads keyboard input
+        if (!isReplayGhost)
         {
-            jumpPressed = true;
+            moveInput = Input.GetAxisRaw("Horizontal");
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                jumpPressed = true;
+            }
         }
     }
 
@@ -43,18 +51,36 @@ public class PlayerMovement : MonoBehaviour
         Move();
 
         Jump();
+
+        animator.SetFloat("Speed", Mathf.Abs(moveInput));
+        animator.SetBool("IsGrounded", isGrounded);
     }
 
     void Move()
     {
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(
+            moveInput * moveSpeed,
+            rb.linearVelocity.y
+        );
+
+        if (moveInput > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (moveInput < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
 
     void Jump()
     {
         if (jumpPressed && isGrounded)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            rb.linearVelocity = new Vector2(
+                rb.linearVelocity.x,
+                jumpForce
+            );
         }
 
         jumpPressed = false;
@@ -64,8 +90,19 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position,
-            groundCheckRadius,
+            groundRadius,
             groundLayer
         );
+    }
+
+    // THIS is what replay system will use
+    public void SetReplayInput(float horizontal, bool jump)
+    {
+        moveInput = horizontal;
+
+        if (jump)
+        {
+            jumpPressed = true;
+        }
     }
 }
